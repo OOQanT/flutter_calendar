@@ -1,14 +1,15 @@
 import 'package:calendar_scheduler/const/colors.dart';
+import 'package:calendar_scheduler/database/drift_database.dart';
+import 'package:calendar_scheduler/model/schedule_with_color.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class TodayBanner extends StatelessWidget {
 
   final DateTime selectedDay; // 선택된 날짜
-  final int scheduleCount; // 스케줄 갯수
 
   const TodayBanner({
     required this.selectedDay,
-    required this.scheduleCount,
     Key? key,
   }): super(key: key);
 
@@ -31,9 +32,20 @@ class TodayBanner extends StatelessWidget {
                 '${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일',
                 style: textStyle,
             ),
-            Text(
-                '${scheduleCount}개',
-                style: textStyle,
+            StreamBuilder<List<Schedule>>(
+              stream: GetIt.I<LocalDatabase>().watchSchedules(selectedDay),
+              builder: (context, snapshot) {
+
+                int count = 0;
+                if(snapshot.hasData){
+                  count = snapshot.data!.length;
+                }
+
+                return Text(
+                    '${count}개',
+                    style: textStyle,
+                );
+              }
             )
           ],
         ),

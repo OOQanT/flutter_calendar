@@ -8,10 +8,13 @@ class CustomTextField extends StatelessWidget {
   final bool isTime; // true-시간 false-내용
   final FormFieldSetter<String> onSaved;
 
+  final String initialValue;
+
   const CustomTextField({
     required this.label,
     required this.isTime,
     required this.onSaved,
+    required this.initialValue,
     Key? key,
   }):super(key: key);
 
@@ -64,8 +67,9 @@ class CustomTextField extends StatelessWidget {
       cursorColor: Colors.grey,
       maxLines: isTime ? 1 : null, // 택스트 필드 줄바꿈 라인 개수 지정
       expands: !isTime,
+      initialValue: initialValue,
       //maxLength: 500,
-      keyboardType: isTime ? TextInputType.number : TextInputType.multiline,
+      keyboardType: isTime ? TextInputType.number : TextInputType.text,
       inputFormatters: isTime ? [
         FilteringTextInputFormatter.digitsOnly, // 숫자 입력만 받게 해줌
       ] : [],
@@ -73,7 +77,7 @@ class CustomTextField extends StatelessWidget {
         border: InputBorder.none,  //텍스트 필트 밑줄 제거
         filled: true,       // 이 속성을 true로 해줘야 텍스트 필드에 색을 넣을 수 있음
         fillColor: Colors.grey[300],
-
+        suffixText: isTime ? '시' : null
       ),
     );
   }
